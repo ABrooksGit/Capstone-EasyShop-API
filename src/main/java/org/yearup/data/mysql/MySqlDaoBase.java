@@ -8,6 +8,7 @@ public abstract class MySqlDaoBase
 {
     private DataSource dataSource;
 
+
     public MySqlDaoBase(DataSource dataSource)
     {
         this.dataSource = dataSource;
