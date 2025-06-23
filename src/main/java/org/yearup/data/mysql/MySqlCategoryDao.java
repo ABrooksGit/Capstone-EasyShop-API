@@ -27,18 +27,20 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
                 """;
 
 
-        Connection connection = getConnection();
+        try(Connection connection = getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet results = preparedStatement.executeQuery();
+        ) {
 
-        while(results.next()){
-            int categoryID = results.getInt(1);
-            String name = results.getString(2);
-            String description = results.getString(3);
-            Category category = new Category(categoryID,name,description);
-            allCategories.add(category);
+            while (results.next()) {
+                int categoryID = results.getInt(1);
+                String name = results.getString(2);
+                String description = results.getString(3);
+                Category category = new Category(categoryID, name, description);
+                allCategories.add(category);
 
 
+            }
         }
 
         // get all categories
@@ -73,9 +75,9 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
 
             }
 
-            }catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            }   catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
         // get category by id
         return null;
 
@@ -141,8 +143,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     public void delete(int categoryId)
     {
         String sql = """
-                Delete * from categories
-                Where category_id = ?
+                DELETE FROM categories WHERE category_id = ?
                 
                 """;
         try(Connection connection = getConnection()){
