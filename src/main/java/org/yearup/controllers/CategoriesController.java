@@ -1,14 +1,15 @@
 package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.data.CategoryDao;
 import org.yearup.data.ProductDao;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
-import org.yearup.models.User;
-import org.yearup.models.authentication.LoginDto;
 
+import javax.annotation.security.RolesAllowed;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -68,6 +69,8 @@ public class CategoriesController
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("{category}")
     public Category addCategory(@RequestBody Category category)
     {
 
@@ -78,6 +81,7 @@ public class CategoriesController
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateCategory(@PathVariable int id, @RequestBody Category category)
     {
         // update the category by id
@@ -90,6 +94,7 @@ public class CategoriesController
 
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCategory(@PathVariable int id)
     {
         categoryDao.delete(id);
