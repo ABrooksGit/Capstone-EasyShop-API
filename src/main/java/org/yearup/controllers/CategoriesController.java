@@ -67,6 +67,7 @@ public class CategoriesController
 
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
+
     public Category addCategory(@RequestBody Category category)
     {
 
@@ -80,6 +81,7 @@ public class CategoriesController
     public void updateCategory(@PathVariable int id, @RequestBody Category category)
     {
         // update the category by id
+        categoryDao.update(id, category);
 
 
 
@@ -90,6 +92,7 @@ public class CategoriesController
     // add annotation to ensure that only an ADMIN can call this function
     public void deleteCategory(@PathVariable int id)
     {
+        categoryDao.delete(id);
         // delete the category by id
     }
 }
