@@ -6,6 +6,8 @@ import org.yearup.data.CategoryDao;
 import org.yearup.data.ProductDao;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
+import org.yearup.models.User;
+import org.yearup.models.authentication.LoginDto;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,6 +23,7 @@ public class CategoriesController
 {
     private CategoryDao categoryDao;
     private ProductDao productDao;
+
 
 
     // create an Autowired controller to inject the categoryDao and ProductDao
@@ -66,8 +69,10 @@ public class CategoriesController
     // add annotation to ensure that only an ADMIN can call this function
     public Category addCategory(@RequestBody Category category)
     {
+
+
         // insert the category
-        return null;
+        return categoryDao.create(category);
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
@@ -75,6 +80,9 @@ public class CategoriesController
     public void updateCategory(@PathVariable int id, @RequestBody Category category)
     {
         // update the category by id
+
+
+
     }
 
 
