@@ -58,7 +58,15 @@ public class CategoriesController
     {
         // get the category by id
         try {
-            return categoryDao.getById(id);
+
+            var category = categoryDao.getById(id);
+            if(category == null){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+
+            return category;
+
+
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
@@ -75,7 +83,7 @@ public class CategoriesController
         try {
             return productDao.listByCategoryId(categoryId);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -83,7 +91,8 @@ public class CategoriesController
     // add annotation to ensure that only an ADMIN can call this function
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("{category}")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PostMapping()
     public Category addCategory(@RequestBody Category category)
     {
         // insert the category
@@ -105,7 +114,7 @@ public class CategoriesController
         try {
             categoryDao.update(id, category);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
 
@@ -118,11 +127,17 @@ public class CategoriesController
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id)
     {
 
+        // delete the category by id
+        try {
             categoryDao.delete(id);
-            // delete the category by id
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
 
     }
 }
