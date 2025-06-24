@@ -44,4 +44,18 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         }
     }
 
+    @Override
+    public Profile editProfile(Profile profile) {
+
+        String sql = """
+                Select 
+                
+                
+                
+                
+                
+                """;
+
+        return null;
+    }
 }

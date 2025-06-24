@@ -82,15 +82,21 @@ public class AuthenticationController {
 
 
                 return new ResponseEntity<>(user, HttpStatus.CREATED);
+
             } else{
+
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Already Exists.");
             }
 
 
+    }
 
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public ResponseEntity<User> getProfile(@Valid @RequestBody ProfileDao profileDao){
 
-
+      return null;
 
 
     }
