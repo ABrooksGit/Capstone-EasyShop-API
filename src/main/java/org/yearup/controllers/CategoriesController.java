@@ -57,7 +57,7 @@ public class CategoriesController
     public Category getById(@PathVariable int id)
     {
         // get the category by id
-        try {
+
 
             var category = categoryDao.getById(id);
             if(category == null){
@@ -67,9 +67,9 @@ public class CategoriesController
             return category;
 
 
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
+
+
+
 
     }
 

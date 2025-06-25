@@ -28,7 +28,8 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
         ShoppingCart shoppingCart = new ShoppingCart();
         String sql = """
-                Select sc.product_id, p.product_name, p.price, sc.quantity from shopping_cart sc
+                Select sc.product_id, p.name, p.price, sc.quantity
+                from shopping_cart sc
                 join products p on sc.product_id = p.product_id
                 where sc.user_id = ?
                 

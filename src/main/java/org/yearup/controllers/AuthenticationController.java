@@ -92,11 +92,15 @@ public class AuthenticationController {
     }
 
 
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public ResponseEntity<User> getProfile(@Valid @RequestBody ProfileDao profileDao){
+    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Profile> getProfile(@PathVariable int id) {
 
-      return null;
+
+
+        return ResponseEntity.ok(profileDao.getProfile(id));
+
+
+
 
 
     }
