@@ -40,7 +40,6 @@ public class ShoppingCartController
 
     // each method in this controller requires a Principal object as a parameter
     @GetMapping
-
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ShoppingCart getCart(Principal principal)
     {
@@ -107,12 +106,9 @@ public class ShoppingCartController
 
         int userId = userDao.getIdByUsername(userName);
 
-        productDao.getById(productId);
-
-
         int quantity = shoppingCartItem.getQuantity();
 
-      shoppingCartDao.addQuantity(userId, productId, quantity);
+        shoppingCartDao.addQuantity(userId, productId, quantity);
 
         return shoppingCartDao.getByUserId(userId);
 
