@@ -47,25 +47,41 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
     }
 
     @Override
-    public Profile editProfile(Profile profile) {
+    public Profile editProfile(int userId) {
 
-//        String sql = """
-//                Select first_name, last_name, phone, email, address, city, state
-//                 zip, username from profiles p join users u on p.user_id = u.user_id
-//                 where u.user_id = ?
-//
-//                """;
-//
-//
-//        try(Connection connection = getConnection()){
-//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//            preparedStatement.setInt(1, profile.getUserId());
-//            preparedStatement.executeUpdate();
-//        } catch (SQLException e){
-//            throw new RuntimeException(e);
-//        }
+        String sql = """
+                Update profiles
+                SET first_name = ? , last_name = ?, phone = ?, email = ?, address = ?, city = ?, state = ?, zip = ?
+                where user_id = ?
 
-        return null;
+                """;
+
+        Profile profile = new Profile();
+
+        try(Connection connection = getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,profile.getFirstName());
+            preparedStatement.setString(2,profile.getLastName());
+            preparedStatement.setString(3,profile.getPhone());
+            preparedStatement.setString(4,profile.getEmail());
+            preparedStatement.setString(5,profile.getAddress());
+            preparedStatement.setString(6,profile.getCity());
+            preparedStatement.setString(7,profile.getState());
+            preparedStatement.setString(8,profile.getZip());
+            preparedStatement.setInt(9, profile.getUserId());
+
+
+
+            int rows = preparedStatement.executeUpdate();
+
+                return profile;
+
+
+
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

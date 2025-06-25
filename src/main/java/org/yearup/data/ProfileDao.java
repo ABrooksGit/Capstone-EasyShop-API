@@ -9,7 +9,7 @@ public interface ProfileDao
 {
     Profile create(Profile profile);
 
-    Profile editProfile(Profile profile);
+    Profile editProfile(int userId);
 
 
     Profile getProfile(int userId);

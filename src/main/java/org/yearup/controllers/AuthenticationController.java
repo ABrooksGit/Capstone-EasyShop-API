@@ -92,18 +92,26 @@ public class AuthenticationController {
     }
 
 
-    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Profile> getProfile(@PathVariable int id) {
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public ResponseEntity<Profile> getProfile(Authentication authentication) {
 
+        String username = authentication.getName();
 
-
-        return ResponseEntity.ok(profileDao.getProfile(id));
-
-
-
-
-
+        int userId = userDao.getIdByUsername(username);
+        return ResponseEntity.ok(profileDao.getProfile(userId));
     }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.PUT)
+    public ResponseEntity<Profile> editProfile(Authentication authentication) {
+
+        String username = authentication.getName();
+
+        int userId = userDao.getIdByUsername(username);
+        return ResponseEntity.ok(profileDao.editProfile(userId));
+    }
+
+
+
 
 }
 
