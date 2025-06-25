@@ -95,19 +95,30 @@ public class AuthenticationController {
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ResponseEntity<Profile> getProfile(Authentication authentication) {
 
+        //get the username
         String username = authentication.getName();
 
+        //get the id from the username
         int userId = userDao.getIdByUsername(username);
+
         return ResponseEntity.ok(profileDao.getProfile(userId));
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.PUT)
-    public ResponseEntity<Profile> editProfile(Authentication authentication) {
+    public ResponseEntity<Profile> editProfile(@RequestBody Profile profile, Authentication authentication) {
 
+        //get the username
         String username = authentication.getName();
 
+        //get the user Id from the Username
         int userId = userDao.getIdByUsername(username);
-        return ResponseEntity.ok(profileDao.editProfile(userId));
+        //Get the profile attached to the userID
+        profile.setUserId(userId);
+        //Make the adjustments to the profile
+        Profile adjustments = profileDao.editProfile(profile);
+
+
+        return ResponseEntity.ok(profileDao.editProfile(adjustments));
     }
 
 

@@ -6,6 +6,7 @@ import org.yearup.data.ShoppingCartDao;
 import org.yearup.models.Product;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.ShoppingCartItem;
+import org.yearup.models.User;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -27,6 +28,8 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     public ShoppingCart getByUserId(int userId) {
 
         ShoppingCart shoppingCart = new ShoppingCart();
+
+
         String sql = """
                 Select sc.product_id, p.name, p.price, sc.quantity
                 from shopping_cart sc
@@ -36,6 +39,9 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
                 
                 
                 """;
+
+
+
 
         try(Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql))
@@ -53,11 +59,11 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
 
                     Product product = new Product();
+                    ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+
                     product.setProductId(productId);
                     product.setName(productName);
                     product.setPrice(price);
-
-                    ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
                     shoppingCartItem.setProduct(product);
                     shoppingCartItem.setQuantity(quantity);
 
@@ -80,7 +86,26 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     }
 
     @Override
-    public void addToCart() {
+    public void addToCart(int userId) {
+
+        Product product = new Product();
+        String sql = """
+                insert into shopping_cart (user_id, product_id, quantity)
+                           values(?, ?, ?);
+                """;
+
+        try(Connection connection = getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, product.getProductId());
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, product.getStock());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 

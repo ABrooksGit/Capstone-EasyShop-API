@@ -47,7 +47,7 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
     }
 
     @Override
-    public Profile editProfile(int userId) {
+    public Profile editProfile(Profile profile) {
 
         String sql = """
                 Update profiles
@@ -56,7 +56,7 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
 
                 """;
 
-        Profile profile = new Profile();
+
 
         try(Connection connection = getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
