@@ -40,7 +40,7 @@ public class ShoppingCartController
 
     // each method in this controller requires a Principal object as a parameter
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
+
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ShoppingCart getCart(Principal principal)
     {
@@ -68,16 +68,25 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PostMapping("/products/{productId}")
+
     public ShoppingCart addToCart(@PathVariable int productId, Principal principal){
 
-        String userName = principal.getName();
+        try {
 
-        int userId = userDao.getIdByUsername(userName);
+            String userName = principal.getName();
 
-         shoppingCartDao.addToCart(userId, productId);
+            int userId = userDao.getIdByUsername(userName);
+
+            shoppingCartDao.addToCart(userId, productId);
 
 
-        return shoppingCartDao.getByUserId(userId);
+            return shoppingCartDao.getByUserId(userId);
+
+        } catch (Exception e) {
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        }
 
 
     }
@@ -90,6 +99,28 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PutMapping("/products/{productId}")
+    public ShoppingCart addQuantity(@PathVariable int productId,  Principal principal, @RequestBody ShoppingCartItem shoppingCartItem){
+
+        String userName = principal.getName();
+
+        int userId = userDao.getIdByUsername(userName);
+
+        productDao.getById(productId);
+
+
+        int quantity = shoppingCartItem.getQuantity();
+
+      shoppingCartDao.addQuantity(userId, productId, quantity);
+
+        return shoppingCartDao.getByUserId(userId);
+
+
+    }
+
+
+
 
 
 
@@ -100,11 +131,17 @@ public class ShoppingCartController
     @DeleteMapping
     public ShoppingCart deleteCart(Principal principal){
 
-        String userName = principal.getName();
+        try {
+            String userName = principal.getName();
 
-        int userId = userDao.getIdByUsername(userName);
+            int userId = userDao.getIdByUsername(userName);
 
-       return shoppingCartDao.deleteFromCart(userId);
+            return shoppingCartDao.deleteFromCart(userId);
+
+        } catch (Exception e) {
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
 
     }

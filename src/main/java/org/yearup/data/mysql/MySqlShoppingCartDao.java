@@ -33,12 +33,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
                 Select p.*, sc.* from shopping_cart sc
                 join products p on sc.product_id = p.product_id
                 where sc.user_id = ?
-                
-                
-                
                 """;
-
-
 
 
         try(Connection connection = getConnection();
@@ -124,6 +119,35 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         }
 
         return shoppingCart;
+
+    }
+
+    @Override
+    public ShoppingCart addQuantity(int userId, int productId, int quantity){
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+
+
+        String sql = """
+            UPDATE shopping_cart
+            SET quantity = ?
+            WHERE user_id = ? AND product_id = ?;
+            """;
+
+        try(Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+
+            preparedStatement.setInt(1,quantity);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, productId);
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return shoppingCart;
+
 
     }
 
