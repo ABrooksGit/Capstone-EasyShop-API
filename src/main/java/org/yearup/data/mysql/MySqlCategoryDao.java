@@ -142,6 +142,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public void delete(int categoryId)
     {
+        // delete category
         String sql = """
                 DELETE FROM categories WHERE category_id = ?
                 
@@ -156,7 +157,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
             throw new RuntimeException(e);
         }
 
-        // delete category
+
     }
 
     private Category mapRow(ResultSet row) throws SQLException

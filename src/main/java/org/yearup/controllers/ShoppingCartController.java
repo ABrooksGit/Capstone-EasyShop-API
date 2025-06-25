@@ -10,6 +10,7 @@ import org.yearup.data.ShoppingCartDao;
 import org.yearup.data.UserDao;
 import org.yearup.models.Product;
 import org.yearup.models.ShoppingCart;
+import org.yearup.models.ShoppingCartItem;
 import org.yearup.models.User;
 
 import java.security.Principal;
@@ -18,6 +19,7 @@ import java.security.Principal;
 // only logged-in users should have access to these actions
 @RestController
 @RequestMapping("cart")
+@CrossOrigin
 public class ShoppingCartController
 {
     // a shopping cart requires
@@ -65,14 +67,18 @@ public class ShoppingCartController
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    @PostMapping("/products/{userId}")
-    public void addToCart(@PathVariable int userId, Principal principal){
+    @PostMapping("/products/{productId}")
+    public ShoppingCart addToCart(@PathVariable int productId, Principal principal){
 
         String userName = principal.getName();
 
-        userId = userDao.getIdByUsername(userName);
+        int userId = userDao.getIdByUsername(userName);
 
-        shoppingCartDao.addToCart(userId);
+        return shoppingCartDao.addToCart(userId, productId);
+
+
+
+
 
     }
 
@@ -87,5 +93,17 @@ public class ShoppingCartController
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
+
+    @DeleteMapping
+    public ShoppingCart deleteCart(Principal principal){
+
+        String userName = principal.getName();
+
+        int userId = userDao.getIdByUsername(userName);
+
+       return shoppingCartDao.deleteFromCart(userId);
+
+
+    }
 
 }

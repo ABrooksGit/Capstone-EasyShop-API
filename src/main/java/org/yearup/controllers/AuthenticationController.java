@@ -23,6 +23,8 @@ import org.yearup.models.User;
 import org.yearup.security.jwt.JWTFilter;
 import org.yearup.security.jwt.TokenProvider;
 
+import java.security.Principal;
+
 @RestController
 @CrossOrigin
 @PreAuthorize("permitAll()")
@@ -93,10 +95,10 @@ public class AuthenticationController {
 
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public ResponseEntity<Profile> getProfile(Authentication authentication) {
+    public ResponseEntity<Profile> getProfile(Principal principal) {
 
         //get the username
-        String username = authentication.getName();
+        String username = principal.getName();
 
         //get the id from the username
         int userId = userDao.getIdByUsername(username);
@@ -105,10 +107,10 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.PUT)
-    public ResponseEntity<Profile> editProfile(@RequestBody Profile profile, Authentication authentication) {
+    public ResponseEntity<Profile> editProfile(@RequestBody Profile profile, Principal principal) {
 
         //get the username
-        String username = authentication.getName();
+        String username = principal.getName();
 
         //get the user Id from the Username
         int userId = userDao.getIdByUsername(username);
