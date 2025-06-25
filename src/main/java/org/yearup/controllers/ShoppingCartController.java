@@ -74,10 +74,10 @@ public class ShoppingCartController
 
         int userId = userDao.getIdByUsername(userName);
 
-        return shoppingCartDao.addToCart(userId, productId);
+         shoppingCartDao.addToCart(userId, productId);
 
 
-
+        return shoppingCartDao.getByUserId(userId);
 
 
     }
@@ -91,9 +91,12 @@ public class ShoppingCartController
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
 
+
+
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @DeleteMapping
     public ShoppingCart deleteCart(Principal principal){
 
@@ -105,5 +108,9 @@ public class ShoppingCartController
 
 
     }
+
+
+
+
 
 }

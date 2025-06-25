@@ -77,16 +77,13 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     }
 
     @Override
-    public ShoppingCart addToCart(int userId, int productId) {
-
-
-       ShoppingCart shoppingCart = new ShoppingCart();
+    public void addToCart(int userId, int productId) {
 
 
         String sql = """
                 insert into shopping_cart (user_id, product_id)
                 values(?, ?)
-                
+                ON DUPLICATE KEY UPDATE quantity = quantity + 1;
                 """;
 
         try(Connection connection = getConnection();
@@ -103,7 +100,6 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             throw new RuntimeException(e);
         }
 
-        return shoppingCart;
 
     }
 
