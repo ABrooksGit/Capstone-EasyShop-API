@@ -1,7 +1,7 @@
 package org.yearup.models;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class Order {

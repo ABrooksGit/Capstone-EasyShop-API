@@ -10,9 +10,10 @@ import org.yearup.data.*;
 import org.yearup.models.*;
 
 import java.security.Principal;
-import java.sql.Date;
-import java.time.LocalDate;
+
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @RestController
@@ -43,6 +44,8 @@ public class OrdersController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public Order placeOrder(Order order, Principal principal){
 
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm:ss");
+
         //get the user Id
         String userName = principal.getName();
         int userId = userDao.getIdByUsername(userName);
@@ -56,16 +59,15 @@ public class OrdersController {
         order.setState(profileDao.getProfile(userId).getState());
         order.setZip(profileDao.getProfile(userId).getZip());
         order.setShippingAmount(shoppingCartDao.getByUserId(userId).getTotal());
-        order = orderDao.placeOrder(order);
+        orderDao.placeOrder(order);
+
         // get back the order id
         int orderId = order.getOrderId();
 
         //get the users shopping cart entries
-        shoppingCartDao.getByUserId(userId);
-
-        //loop through each shopping cart entry
         Map<Integer, ShoppingCartItem> shoppingCartItemMap = shoppingCartDao.getByUserId(userId).getItems();
 
+        //loop through each shopping cart entry
         //for each one, add a record to the OrderLineItem table using the order id of the above order, and the
         //product id of the shopping cart row we are looping through
         shoppingCartItemMap.values().forEach(shoppingCartItem -> {
@@ -75,6 +77,7 @@ public class OrdersController {
             orderLineItem.setQuantity(shoppingCartItem.getQuantity());
             orderLineItem.setDiscount(shoppingCartItem.getDiscountPercent());
             orderLineDao.createOrderLine(orderLineItem);
+
         });
 
         //at this point we should have the order and the order items recorded...

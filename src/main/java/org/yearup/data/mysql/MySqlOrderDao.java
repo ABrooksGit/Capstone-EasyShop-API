@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
@@ -45,8 +46,10 @@ public class MySqlOrderDao extends MySqlDaoBase implements OrderDao {
 
             try(ResultSet keys = preparedStatement.getGeneratedKeys()){
 
-                if(keys.next()){
-                    order.setOrderId(keys.getInt(1));
+                if(rows > 0) {
+                    if (keys.next()) {
+                        order.setOrderId(keys.getInt(1));
+                    }
                 }
             }
 

@@ -89,8 +89,8 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
 
         String sql = """
                 Select first_name, last_name, phone, email, address, city, state,
-                 zip from profiles p join users u on p.user_id = u.user_id
-                 where u.user_id = ?
+                 zip from profiles
+                 where user_id = ?
          
                 """;
 
