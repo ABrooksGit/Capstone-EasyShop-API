@@ -47,7 +47,6 @@ public class OrdersController {
     public Order placeOrder(Order order, Principal principal){
 
         List<OrderLineItem> lineItems = new ArrayList<>();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm:ss");
 
         //get the user Id
         String userName = principal.getName();
@@ -69,31 +68,31 @@ public class OrdersController {
         int orderId = order.getOrderId();
 
         //get the users shopping cart entries
-        Map<Integer, ShoppingCartItem> length = shoppingCartDao.getByUserId(userId).getItems();
+        Map<Integer, ShoppingCartItem> items = shoppingCartDao.getByUserId(userId).getItems();
 
         //loop through each shopping cart entry
         //for each one, add a record to the OrderLineItem table using the order id of the above order, and the
         //product id of the shopping cart row we are looping through
-        length.values().forEach(shoppingCartItem -> {
+        items.values().forEach(shoppingCartItem -> {
             orderLineItem.setOrderId(orderId);
             orderLineItem.setProductId(shoppingCartItem.getProductId());
             orderLineItem.setSalesPrice(shoppingCartItem.getLineTotal());
             orderLineItem.setQuantity(shoppingCartItem.getQuantity());
             orderLineItem.setDiscount(shoppingCartItem.getDiscountPercent());
-            orderLineItem.setQuantity(length.size());
             orderLineDao.createOrderLine(orderLineItem);
             lineItems.add(orderLineItem);
 
-
-
         });
 
-
         order.setLineItems(lineItems);
+
+
         //at this point we should have the order and the order items recorded...
         //only one thing left to do
         //clear the cart.
         shoppingCartDao.deleteFromCart(userId);
+
+
         return order;
     }
 

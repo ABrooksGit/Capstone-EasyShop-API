@@ -13,6 +13,7 @@ import java.security.Principal;
 @RestController
 @CrossOrigin
 @PreAuthorize("permitAll()")
+@RequestMapping("profile")
 public class ProfileController {
 
     private UserDao userDao;
@@ -24,8 +25,9 @@ public class ProfileController {
         this.profileDao = profileDao;
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<Profile> getProfile(Principal principal) {
+
 
         //get the username
         String username = principal.getName();
@@ -36,7 +38,7 @@ public class ProfileController {
         return ResponseEntity.ok(profileDao.getProfile(userId));
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<Profile> editProfile(@RequestBody Profile profile, Principal principal) {
 
         //get the username
