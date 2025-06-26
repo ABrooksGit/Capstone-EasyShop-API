@@ -14,6 +14,8 @@ import java.security.Principal;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,6 +46,7 @@ public class OrdersController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public Order placeOrder(Order order, Principal principal){
 
+        List<OrderLineItem> lineItems = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm:ss");
 
         //get the user Id
@@ -60,28 +63,33 @@ public class OrdersController {
         order.setZip(profileDao.getProfile(userId).getZip());
         order.setShippingAmount(shoppingCartDao.getByUserId(userId).getTotal());
         orderDao.placeOrder(order);
-        
+
 
         // get back the order id
         int orderId = order.getOrderId();
 
         //get the users shopping cart entries
-        Map<Integer, ShoppingCartItem> shoppingCartItemMap = shoppingCartDao.getByUserId(userId).getItems();
+        Map<Integer, ShoppingCartItem> length = shoppingCartDao.getByUserId(userId).getItems();
 
         //loop through each shopping cart entry
         //for each one, add a record to the OrderLineItem table using the order id of the above order, and the
         //product id of the shopping cart row we are looping through
-        shoppingCartItemMap.values().forEach(shoppingCartItem -> {
+        length.values().forEach(shoppingCartItem -> {
             orderLineItem.setOrderId(orderId);
             orderLineItem.setProductId(shoppingCartItem.getProductId());
             orderLineItem.setSalesPrice(shoppingCartItem.getLineTotal());
             orderLineItem.setQuantity(shoppingCartItem.getQuantity());
             orderLineItem.setDiscount(shoppingCartItem.getDiscountPercent());
-            orderLineItem.setQuantity(shoppingCartItemMap.size());
+            orderLineItem.setQuantity(length.size());
             orderLineDao.createOrderLine(orderLineItem);
+            lineItems.add(orderLineItem);
+
+
 
         });
 
+
+        order.setLineItems(lineItems);
         //at this point we should have the order and the order items recorded...
         //only one thing left to do
         //clear the cart.
