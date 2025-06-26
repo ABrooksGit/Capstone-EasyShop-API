@@ -2,12 +2,13 @@ package org.yearup.models;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Order {
 
     private int orderId;
     private int user_Id;
-    private LocalDate date;
+    private LocalDateTime date;
     private String address;
     private String city;
     private String state;
@@ -19,7 +20,7 @@ public class Order {
         //Empty
     }
 
-    public Order(int orderId, int user_Id, LocalDate date, String address, String city, String state, String zip, BigDecimal shippingAmount) {
+    public Order(int orderId, int user_Id, LocalDateTime date, String address, String city, String state, String zip, BigDecimal shippingAmount) {
         this.orderId = orderId;
         this.user_Id = user_Id;
         this.date = date;
@@ -46,11 +47,11 @@ public class Order {
         this.user_Id = user_Id;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

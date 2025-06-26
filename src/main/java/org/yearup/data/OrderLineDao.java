@@ -1,9 +1,13 @@
 package org.yearup.data;
 
+import org.yearup.models.OrderLineItem;
+
 public interface OrderLineDao {
 
 
-    void orderDetails(int userId);
+
+
+    void createOrderLine(OrderLineItem orderLineItem);
 
 
 
