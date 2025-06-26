@@ -1,6 +1,7 @@
 package org.yearup.controllers;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +21,20 @@ public class OrdersController {
     private ProductDao productDao;
     private ShoppingCartDao shoppingCartDao;
     private ProfileDao profileDao;
-    private Profile profile;
     private OrderDao orderDao;
-    private ShoppingCart shoppingCart;
+    private OrderLineDao orderLineDao;
 
 
 
+    @Autowired
+    public OrdersController(UserDao userDao, ProductDao productDao, ShoppingCartDao shoppingCartDao, ProfileDao profileDao, OrderDao orderDao) {
+        this.userDao = userDao;
+        this.productDao = productDao;
+        this.shoppingCartDao = shoppingCartDao;
+        this.profileDao = profileDao;
+        this.orderDao = orderDao;
+
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
@@ -36,14 +45,17 @@ public class OrdersController {
         int userId = userDao.getIdByUsername(userName);
         //create a new order record in the orders table.
         Order order = new Order();
+
         order.setUser_Id(userId);
         order.setDate(LocalDate.now());
-        order.setAddress(profile.getAddress());
-        order.setCity(profile.getCity());
-        order.setState(profile.getState());
-        order.setZip(profile.getZip());
+        order.setAddress(profileDao.getProfile(userId).getAddress());
+        order.setCity(profileDao.getProfile(userId).getCity());
+        order.setState(profileDao.getProfile(userId).getState());
+        order.setZip(profileDao.getProfile(userId).getZip());
+        order.setShippingAmount(shoppingCartDao.getByUserId(userId).getTotal());
         // get back the order id
-        order.setOrderId(order.getOrderId());
+        orderLineDao.orderDetails(userId);
+
 
 
 
@@ -51,7 +63,7 @@ public class OrdersController {
         shoppingCartDao.getByUserId(userId);
 
         //loop through each shopping cart entry
-        Map<Integer, ShoppingCartItem> shoppingCartItemMap = shoppingCart.getItems();
+        Map<Integer, ShoppingCartItem> shoppingCartItemMap = shoppingCartDao.getByUserId(userId).getItems();
 
         //for each one, add a record to the OrderLineItem table using the order id of the above order, and the
         //product id of the shopping cart row we are looping through
@@ -62,7 +74,9 @@ public class OrdersController {
             orderLineItem.setSalesPrice(shoppingCartItem.getLineTotal());
             orderLineItem.setQuantity(shoppingCartItem.getQuantity());
             orderLineItem.setDiscount(shoppingCartItem.getDiscountPercent());
-            orderDao.placeOrder(userId, order.getOrderId(), order.getAddress(), order.getCity(), order.getState(),order.getShippingAmount());
+            orderDao.placeOrder(profileDao.getProfile(userId), shoppingCartDao.getByUserId(userId));
+
+
         });
 
 
@@ -72,10 +86,14 @@ public class OrdersController {
         //only one thing left to do
 
         //clear the cart.
+        shoppingCartDao.deleteFromCart(userId);
 
 
         return order;
+
     }
+
+
 
 
 

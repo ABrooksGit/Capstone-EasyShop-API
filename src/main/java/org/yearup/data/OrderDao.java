@@ -1,9 +1,12 @@
 package org.yearup.data;
 
+import org.yearup.models.Profile;
+import org.yearup.models.ShoppingCart;
+
 import java.math.BigDecimal;
 
 public interface OrderDao {
 
-    void placeOrder(int orderId, int userId, String address, String city, String zip, BigDecimal shippingAmount);
+    void placeOrder(Profile profile, ShoppingCart shoppingCart);
 
 }

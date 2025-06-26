@@ -1,5 +1,6 @@
 package org.yearup.models;
 
+
 public class Profile
 {
     private int userId;
