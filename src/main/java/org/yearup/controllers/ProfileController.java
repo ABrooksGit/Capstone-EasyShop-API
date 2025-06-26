@@ -44,13 +44,15 @@ public class ProfileController {
 
         //get the user Id from the Username
         int userId = userDao.getIdByUsername(username);
+
         //Get the profile attached to the userID
         profile.setUserId(userId);
+
         //Make the adjustments to the profile
         Profile adjustments = profileDao.editProfile(profile);
 
-
         return ResponseEntity.ok(profileDao.editProfile(adjustments));
+
     }
 
 

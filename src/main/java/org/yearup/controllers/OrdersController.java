@@ -59,7 +59,8 @@ public class OrdersController {
         order.setState(profileDao.getProfile(userId).getState());
         order.setZip(profileDao.getProfile(userId).getZip());
         order.setShippingAmount(shoppingCartDao.getByUserId(userId).getTotal());
-        orderDao.placeOrder(order);
+
+
 
         // get back the order id
         int orderId = order.getOrderId();
@@ -76,9 +77,11 @@ public class OrdersController {
             orderLineItem.setSalesPrice(shoppingCartItem.getLineTotal());
             orderLineItem.setQuantity(shoppingCartItem.getQuantity());
             orderLineItem.setDiscount(shoppingCartItem.getDiscountPercent());
+            orderLineItem.setQuantity(shoppingCartItemMap.size());
             orderLineDao.createOrderLine(orderLineItem);
 
         });
+
 
         //at this point we should have the order and the order items recorded...
         //only one thing left to do

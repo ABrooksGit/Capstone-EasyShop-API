@@ -58,8 +58,9 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
 
 
 
-        try(Connection connection = getConnection()){
+        try(Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ){
             preparedStatement.setString(1,profile.getFirstName());
             preparedStatement.setString(2,profile.getLastName());
             preparedStatement.setString(3,profile.getPhone());
