@@ -1,4 +1,5 @@
 Easy-Shop-API
+
 This easy shop api will allow a user from the front end to be able to create a website that can take advantage this code. During this capstone we were handed a website and code which was filled with bugs and incomplete code. So I looked through the pieces of code that needed to be done and filled out everything possible, from what was given.
 
 Two bugs that needed to be fixed were sorting the products by the price. Originally the price only accepted a single value and want an inbetween. In order to fix this bug, I had to go into the SqlDao for products and add another price point to search between. Then apply it to the prepared statement.
