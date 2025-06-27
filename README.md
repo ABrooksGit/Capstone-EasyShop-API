@@ -15,3 +15,10 @@ The next optional task is being able to edit a users profile. This would include
 The last optional task is going back to the Shopping Cart and adding a checkout function, which not only checks out the items in the cart, but also passes through the profile information. For this to work there was a number of things that was needed. Since this optional didnt have any of the classes already there, I had to create it from scratch. The thought process to creating this was a lot harder and harder to grasp because of how its presented. But after doing so the shopping cart can be checked out and all the items attached to that check out will be seen too.
 
 Lastly Postman was used to verify and check if these worked without needing a frontend. Even though a website was provided, there are still some features not added to the frontend and can only be checked through postman. There were also tests included in a form of a collection that can run the code and check if everything is working. Which I used a lot to test.
+
+
+![Bug 1, Before and After(PreparedStatement)](https://github.com/user-attachments/assets/47526b07-40a1-4627-a5d2-358a742b407a)
+![Bug 1, Before and After(SQL)](https://github.com/user-attachments/assets/1bad0ac6-6e40-4496-bfe2-3ed340698cf7)
+![Bug 2 and the FIx](https://github.com/user-attachments/assets/f1642a9f-68cd-4d3f-a1fb-e89ccf76ba7d)
+![postman optional easyshop collection](https://github.com/user-attachments/assets/789c7221-7595-46c8-baa4-d070ef43452a)
+![postman easyshop collection](https://github.com/user-attachments/assets/f7b4ab7e-05c8-4e42-a08d-7b3dd527dc16)
