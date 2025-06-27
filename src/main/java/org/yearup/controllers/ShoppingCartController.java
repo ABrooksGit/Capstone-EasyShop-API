@@ -46,6 +46,7 @@ public class ShoppingCartController
         try
         {
             // get the currently logged-in username
+
             String userName = principal.getName();
             // find database user by userId
             int userId = userDao.getIdByUsername(userName);
@@ -66,16 +67,19 @@ public class ShoppingCartController
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    @PostMapping("/products/{productId}")
+    @PostMapping("/products/{productId}") //From Request Mapping, go to products then another slash to get the productId
 
     public ShoppingCart addToCart(@PathVariable int productId, Principal principal){
 
         try {
 
+            //From principal(The authentication get the name of the current user)
             String userName = principal.getName();
 
+            // create an int of userId to attach it to the userDao.
             int userId = userDao.getIdByUsername(userName);
 
+            //get the shopping cart and add the items using the created userId and the PathVariable of productId
             shoppingCartDao.addToCart(userId, productId);
 
 
@@ -102,14 +106,19 @@ public class ShoppingCartController
     @PutMapping("/products/{productId}")
     public ShoppingCart addQuantity(@PathVariable int productId,  Principal principal, @RequestBody ShoppingCartItem shoppingCartItem){
 
+        //Gets the userName from principal
         String userName = principal.getName();
 
+        //Attaches the userId to userDao from the userName we got from the principal.
         int userId = userDao.getIdByUsername(userName);
 
+        //Attaches an int quantity to the shoppingCartItem and gets the quantity of that item
         int quantity = shoppingCartItem.getQuantity();
 
+        //Passing through the add, which adds the quantity for the productId of choice
         shoppingCartDao.addQuantity(userId, productId, quantity);
 
+        //Returns the userId
         return shoppingCartDao.getByUserId(userId);
 
 
@@ -132,6 +141,7 @@ public class ShoppingCartController
 
             int userId = userDao.getIdByUsername(userName);
 
+            //Instead of returning the shopping cart, we delete the contents inside of it
             return shoppingCartDao.deleteFromCart(userId);
 
         } catch (Exception e) {

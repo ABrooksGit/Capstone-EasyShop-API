@@ -81,6 +81,7 @@ public class ProductsController
     {
         try
         {
+            //Before: productDao.create(product) which is incorrect because this is the update method
             productDao.update(id, product);
         }
         catch(Exception ex)

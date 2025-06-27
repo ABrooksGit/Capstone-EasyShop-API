@@ -25,6 +25,7 @@ public class ProfileController {
         this.profileDao = profileDao;
     }
 
+    //Get Mapping, to the location of the requestMapping
     @GetMapping
     public ResponseEntity<Profile> getProfile(Principal principal) {
 
@@ -35,9 +36,11 @@ public class ProfileController {
         //get the id from the username
         int userId = userDao.getIdByUsername(username);
 
+
         return ResponseEntity.ok(profileDao.getProfile(userId));
     }
 
+    //Post Mapping to the location the requestMapping
     @PutMapping
     public ResponseEntity<Profile> editProfile(@RequestBody Profile profile, Principal principal) {
 

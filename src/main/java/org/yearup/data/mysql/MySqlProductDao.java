@@ -24,6 +24,15 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
         List<Product> products = new ArrayList<>();
 
 
+
+//      Before:
+//        String sql = "SELECT * FROM products " +
+//                "WHERE (category_id = ? OR ? = -1) " +
+//                "   AND (price <= ? OR ? = -1)" +
+//                "   AND (color = ? OR ? = '') ";
+        //This is wrong because it's only passing through the price one time instead of twice.
+
+
         String sql = "SELECT * FROM products " +
                 "WHERE (category_id = ? OR ? = -1) " +
                 "   AND (price <= ? OR ? = -1)" +
@@ -40,6 +49,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
             PreparedStatement statement = connection.prepareStatement(sql);
 
             //Each Value needs to be accounted for twice because of -1 and the '' for color
+
             statement.setInt(1, categoryId);
             statement.setInt(2, categoryId);
             statement.setBigDecimal(3, maxPrice);
@@ -48,6 +58,14 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
             statement.setBigDecimal(6, minPrice);
             statement.setString(7, color);
             statement.setString(8, color);
+
+            //Before:   statement.setInt(1, categoryId);
+            //            statement.setInt(2, categoryId);
+            //            statement.setBigDecimal(3, minPrice);
+            //            statement.setBigDecimal(4, minPrice);
+            //            statement.setString(5, color);
+            //            statement.setString(6, color);
+            //          And again we don't get the maxPrice. So this was the bug
 
             ResultSet row = statement.executeQuery();
 
